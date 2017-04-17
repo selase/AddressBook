@@ -79,17 +79,23 @@ class ListContactViewController: UIViewController, UITableViewDelegate, UITableV
         
         
         cell.imageView?.image = UIImage(data: personData.photo! as Data)
-        
-//        let cellIdentifier = "cell"
-//        
-//        cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)!
-//        let photoData = person[indexPath.row].photo
-//        let image : UIImage = UIImage(named: photoData)
-//        cell.imageView?.image = image
-        
+
         
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let personData = person[indexPath.row]
+        performSegue(withIdentifier: "contactSegue", sender: personData)
+
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let nextVC = segue.destination as! AddContactViewController
+        nextVC.personData = sender as? Contacts
+        
+        
     }
 
    
