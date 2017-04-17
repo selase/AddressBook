@@ -17,6 +17,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //Selase: Changes to the Navigation Bar
+        
+        let navigationBarAppearace = UINavigationBar.appearance()
+        
+        navigationBarAppearace.tintColor = UIColor.gray
+        navigationBarAppearace.barTintColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
+        
+        // Sets Bar's Background Image (Color) //
+        navigationBarAppearace.setBackgroundImage(UIImage.imageWithColor(color: .white), for: .default)
+        // Sets Bar's Shadow Image (Color) //
+        navigationBarAppearace.shadowImage = UIImage.imageWithColor(color: UIColor(hex: "F6F7FB"))
+        
         return true
     }
 
