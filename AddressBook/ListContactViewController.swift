@@ -11,6 +11,7 @@ import UIKit
 class ListContactViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
 
+    @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var tableView: UITableView!
     
     var person : [Contacts] = []
@@ -23,11 +24,24 @@ class ListContactViewController: UIViewController, UITableViewDelegate, UITableV
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        tableView.layer.cornerRadius = 10
+        searchTextField.layer.cornerRadius = 15.0
+        searchTextField.layer.borderWidth = 0.3
+        
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         getData()
         tableView.reloadData()
+        
+        
+        
+        super.viewWillAppear(animated)
+        // Hide the navigation bar on this view controller
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     func getData() {
@@ -35,7 +49,6 @@ class ListContactViewController: UIViewController, UITableViewDelegate, UITableV
         
         do {
             person = try context.fetch(Contacts.fetchRequest())
-            print(person)
         }
         catch {
             print("Failed to fetch")
@@ -73,14 +86,19 @@ class ListContactViewController: UIViewController, UITableViewDelegate, UITableV
         let personData = person[indexPath.row]
         
         cell.textLabel?.numberOfLines = 0
-        cell.textLabel?.font = UIFont(name:"HelveticaNeue-Thin", size:17)
+        cell.textLabel?.font = UIFont(name:"HelveticaNeue-Thin", size:14)
        
         cell.textLabel?.text = personData.firstName! + " " + personData.lastName! + "\n\(personData.phone ?? "#")"
         
         
-        cell.imageView?.image = UIImage(data: personData.photo! as Data)
-
+        //cell.imageView?.image = UIImage(data: personData.photo! as Data)
+        cell.imageView?.image = imageWithImage(image: UIImage(data: personData.photo! as Data)!, scaledToSize: CGSize(width: 30, height: 30))
         
+        let cellImage = cell.imageView
+        cellImage?.layer.layoutIfNeeded()
+        cellImage?.layer.cornerRadius = (cellImage?.frame.height)! / 2.0
+        cellImage?.layer.masksToBounds = true
+ 
         
         return cell
     }
@@ -97,6 +115,17 @@ class ListContactViewController: UIViewController, UITableViewDelegate, UITableV
         
         
     }
+    // Returns a resized image to the dimensions of choice
+    func imageWithImage(image:UIImage,scaledToSize newSize:CGSize)->UIImage{
+        
+        UIGraphicsBeginImageContext( newSize )
+        image.draw(in: CGRect(x: 0,y: 0,width: newSize.width,height: newSize.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!.withRenderingMode(.alwaysOriginal)
+    }
+
+    
 
    
 }
